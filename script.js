@@ -16,6 +16,7 @@ const options = {
 
   // bars
   valuesPosition: "center", // flex-start, center, flex-end
+  spacing: "20", // 0 - 100
   labels: ["three", "four", "five", "one", "two", "six", "seven", "eight"],
   barColors: ["#222", "#444", "#666"],
   valueColors: ["#f00", "#0f0", "#00f"],
@@ -69,7 +70,7 @@ function drawBarChart(data, options, element) {
   }
 
   // set bar properties
-  const barWidth = (1 / dataLength) * 80 + "%";
+  const barWidth = (1 / dataLength) * (100 - options.spacing) + "%";
   $(".bar").css("width", barWidth);
   $(".bar").css("align-items", options.valuesPosition);
 }
