@@ -19,7 +19,7 @@ const options = {
   },
   bars: {
     valuesPosition: "center", // flex-start, center, flex-end
-    spacing: "20", // 0 - 100
+    spacing: "20", // 0 - 100, though 100 will render invisible bars
     labels: ["three", "four", "five", "one", "two", "six", "seven", "eight"],
     colors: ["#222", "#444", "#666"],
     valueColors: ["#f00", "#0f0", "#00f"],
@@ -40,13 +40,17 @@ function renderChart(chart, element) {
   xAxis += units;
   yAxis += units;
 
+  // set chart width, height, background color
   element.css("width", xAxis);
   element.css("height", yAxis);
   element.css("background-color", backgroundColor);
 }
 
-function renderBars(dataLength, data, bars) {
+function renderBars(data, bars) {
+  const dataLength = data.length;
+
   for (let i = 0; i < dataLength; i++) {
+    // append bars
     element.append(
       `<div class='bar' id='bar${[i]}'><p class='barValue' id='barValue${[
         i,
@@ -54,19 +58,14 @@ function renderBars(dataLength, data, bars) {
         bars.labels[i]
       }</p></div>`
     );
-  }
-}
 
-function setBars(dataLength, bars) {
-  for (let i = 0; i < dataLength; i++) {
-    let barColorIndex = i % bars.colors.length;
-    let barValueIndex = i % bars.valueColors.length;
-    let barLabelIndex = i % bars.labelColors.length;
-    let barColor = `${bars.colors[barColorIndex]}`;
-    let valueColor = `${bars.valueColors[barValueIndex]}`;
-    let labelColor = `${bars.labelColors[barLabelIndex]}`;
-
-    // set bar color, value & label colors
+    // set bar & bar properties' colors
+    const barColorIndex = i % bars.colors.length;
+    const barValueIndex = i % bars.valueColors.length;
+    const barLabelIndex = i % bars.labelColors.length;
+    const barColor = `${bars.colors[barColorIndex]}`;
+    const valueColor = `${bars.valueColors[barValueIndex]}`;
+    const labelColor = `${bars.labelColors[barLabelIndex]}`;
     $(`#bar${[i]}`).css("background-color", barColor);
     $(`#barValue${[i]}`).css("color", valueColor);
     $(`#barLabel${[i]}`).css("color", labelColor);
@@ -74,19 +73,17 @@ function setBars(dataLength, bars) {
 }
 
 function setAxis(data, chart, bars) {
-  if (chart.mainAxis === "x") {
-    const dataLength = data.length;
-    const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
+  const dataLength = data.length;
+  const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
+
+  // set chart properties according to axis
+  if (chart.mainAxis === "x" || chart.mainAxis === "X") {
     $(".bar").css("width", barValue);
     $(".bar").css("align-items", bars.valuesPosition);
-
-    // set bar yAxis
     for (let i = 0; i < dataLength; i++) {
       $(`#bar${[i]}`).css("height", `${data[i]}${chart.units}`);
     }
-  } else if (chart.mainAxis === "y") {
-    const dataLength = data.length;
-    const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
+  } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
     $("#barChart").css("flex-direction", "column");
     $("#barChart").css("align-items", "flex-start");
     $(".bar").css("height", barValue);
@@ -97,8 +94,6 @@ function setAxis(data, chart, bars) {
     $(".barLabel").css("left", "-0.5rem");
     $(".barLabel").css("top", "0");
     $(".barLabel").css("transform", "translate(-100%, 50%)");
-
-    // set bar xAxis
     for (let i = 0; i < dataLength; i++) {
       $(`#bar${[i]}`).css("width", `${data[i]}${chart.units}`);
     }
@@ -106,16 +101,14 @@ function setAxis(data, chart, bars) {
 }
 
 function setTicks(chart, element) {
-  if (chart.mainAxis === "x") {
-    console.log(chart);
-    // set ticks
+  // set ticks according to axis
+  if (chart.mainAxis === "x" || chart.mainAxis === "X") {
     for (let i = 0; i <= chart.yAxis; i += chart.tickInterval) {
       element.append(
         `<div class='tick' style="bottom: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
       );
     }
-  } else if (chart.mainAxis === "y") {
-    // set ticks
+  } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
     for (let i = 0; i <= chart.xAxis; i += chart.tickInterval) {
       element.append(
         `<div class='tick' style="left: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
@@ -131,13 +124,12 @@ function setTicks(chart, element) {
 
 // main function
 function drawBarChart(data, options, element) {
-  const dataLength = data.length;
   const { title, chart, bars } = options;
 
+  // call helper functions
   renderTitle(title);
   renderChart(chart, element);
-  renderBars(dataLength, data, bars);
-  setBars(dataLength, bars);
+  renderBars(data, bars);
   setTicks(chart, element);
   setAxis(data, chart, bars);
 }
