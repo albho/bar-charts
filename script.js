@@ -1,3 +1,6 @@
+/* eslint-disable no-inline-comments */
+/* eslint-disable comma-dangle */
+
 // dummy data
 const data = [3, 4, 5, 1, 2];
 const options = {
@@ -7,30 +10,14 @@ const options = {
   width: "10",
   height: "10",
   units: "cm",
-  backgroundColor: "lightgrey",
+  backgroundColor: "#eee",
 
   // bars
-  barValuesPosition: "center", // flex-start, center, flex-end
+  valuesPosition: "center", // flex-start, center, flex-end
   labels: ["three", "four", "five", "one", "two"],
-  barsColor: "#333",
+  barsColor: "#222",
 };
 const element = $("#barChart");
-
-// main function
-function drawBarChart(data, options, element) {
-  // render individual bars
-  for (let i = 0; i < data.length; i++) {
-    element.append(
-      `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${
-        options.units
-      }'><p class='barValue'>${data[i]}</p><p class='barLabel'>${
-        options.labels[i]
-      }</p></div>`
-    );
-  }
-
-  setProperties(options, element);
-}
 
 // set chart properties
 function setProperties(options, element) {
@@ -47,7 +34,23 @@ function setProperties(options, element) {
   const barWidth = (1 / data.length) * 80 + "%";
   $(".bar").css("background-color", options.barsColor);
   $(".bar").css("width", barWidth);
-  $(".bar").css("align-items", options.barValuesPosition);
+  $(".bar").css("align-items", options.valuesPosition);
+}
+
+// main function
+function drawBarChart(data, options, element) {
+  // render individual bars
+  for (let i = 0; i < data.length; i++) {
+    element.append(
+      `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${
+        options.units
+      }'><p class='barValue'>${data[i]}</p><p class='barLabel'>${
+        options.labels[i]
+      }</p></div>`
+    );
+  }
+
+  setProperties(options, element);
 }
 
 // call main function

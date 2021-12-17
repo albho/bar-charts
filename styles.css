@@ -7,7 +7,7 @@
   font-family: "Lato", sans-serif;
 }
 
-main {
+#chartContainer {
   display: flex;
   height: 100vh;
   flex-direction: column;
