@@ -21,9 +21,11 @@ const options = {
 };
 const element = $("#barChart");
 
-// set chart properties
-function setProperties(options, element) {
+// main function
+function drawBarChart(data, options, element) {
+  // set title
   $(`<h1>${options.title}</h1>`).insertBefore(element);
+
   // render chart dimensions & background color
   let { width, height, units, backgroundColor } = options;
   width += units;
@@ -32,17 +34,6 @@ function setProperties(options, element) {
   element.css("height", height);
   element.css("background-color", backgroundColor);
 
-  // bar properties
-  const barWidth = (1 / data.length) * 80 + "%";
-  $(".bar").css("background-color", options.barsColor);
-  $(".bar").css("width", barWidth);
-  $(".bar").css("align-items", options.valuesPosition);
-  $(".barValue").css("color", options.valuesColor);
-  $(".barLabel").css("color", options.labelsColor);
-}
-
-// main function
-function drawBarChart(data, options, element) {
   // render individual bars
   for (let i = 0; i < data.length; i++) {
     element.append(
@@ -54,7 +45,13 @@ function drawBarChart(data, options, element) {
     );
   }
 
-  setProperties(options, element);
+  // set bar properties
+  const barWidth = (1 / data.length) * 80 + "%";
+  $(".bar").css("background-color", options.barsColor);
+  $(".bar").css("width", barWidth);
+  $(".bar").css("align-items", options.valuesPosition);
+  $(".barValue").css("color", options.valuesColor);
+  $(".barLabel").css("color", options.labelsColor);
 }
 
 // call main function
