@@ -5,6 +5,8 @@
 const data = [3, 4, 5, 1, 2];
 const options = {
   title: "Bar Chart",
+  titleColor: "#222",
+  titleSize: "2rem",
 
   // chart
   width: "10",
@@ -25,6 +27,8 @@ const element = $("#barChart");
 function drawBarChart(data, options, element) {
   // set title
   $(`<h1>${options.title}</h1>`).insertBefore(element);
+  $("h1").css("color", options.titleColor);
+  $("h1").css("font-size", options.titleSize);
 
   // render chart dimensions & background color
   let { width, height, units, backgroundColor } = options;
