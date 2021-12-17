@@ -10,11 +10,13 @@ const options = {
   width: "10",
   height: "10",
   units: "cm",
-  backgroundColor: "#eee",
+  backgroundColor: "#ccc",
 
   // bars
   valuesPosition: "center", // flex-start, center, flex-end
   labels: ["three", "four", "five", "one", "two"],
+  valuesColor: "#ccc",
+  labelsColor: "#222",
   barsColor: "#222",
 };
 const element = $("#barChart");
@@ -35,6 +37,8 @@ function setProperties(options, element) {
   $(".bar").css("background-color", options.barsColor);
   $(".bar").css("width", barWidth);
   $(".bar").css("align-items", options.valuesPosition);
+  $(".barValue").css("color", options.valuesColor);
+  $(".barLabel").css("color", options.labelsColor);
 }
 
 // main function
