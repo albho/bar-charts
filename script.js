@@ -8,11 +8,13 @@ const options = {
   titleColor: "#222",
   titleSize: "2rem",
   mainAxis: "x", // x or y
+
   // chart
-  width: "15",
-  height: "10",
+  width: 15,
+  height: 10,
   units: "cm",
   backgroundColor: "#ccc",
+  tickInterval: 2,
 
   // bars
   valuesPosition: "center", // flex-start, center, flex-end
@@ -73,6 +75,15 @@ function drawBarChart(data, options, element) {
   if (options.mainAxis === "x") {
     $(".bar").css("width", barValue);
     $(".bar").css("align-items", options.valuesPosition);
+
+    // set ticks
+    for (let i = options.height; i >= 0; i--) {
+      element.append(
+        `<div class='tick' style="bottom: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
+      );
+    }
+
+    // set bar height
     for (let i = 0; i < dataLength; i++) {
       let height = `${data[i]}${options.units}`;
       $(`#bar${[i]}`).css("height", height);
@@ -88,6 +99,20 @@ function drawBarChart(data, options, element) {
     $(".barLabel").css("left", "-0.5rem");
     $(".barLabel").css("top", "0");
     $(".barLabel").css("transform", "translate(-100%, 50%)");
+
+    // set ticks
+    for (let i = options.width; i >= 0; i--) {
+      element.append(
+        `<div class='tick' style="left: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
+      );
+    }
+    $(".tick").css("width", "0");
+    $(".tick").css("height", "100%");
+    $(".tick").css("border-left", "1px solid black");
+    $(".tickLabel").css("bottom", "-0.5rem");
+    $(".tickLabel").css("transform", "translate(-50%, 100%");
+
+    // set bar width
     for (let i = 0; i < dataLength; i++) {
       let width = `${data[i]}${options.units}`;
       $(`#bar${[i]}`).css("width", width);

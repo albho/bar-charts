@@ -19,6 +19,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: flex-end;
+  position: relative;
 }
 
 /* default styling */
@@ -29,11 +30,13 @@
   justify-content: center;
   position: relative;
   padding: 0.5rem;
+  z-index: 99;
 }
 
 .barValue {
   left: 50%;
   color: white;
+  z-index: 999;
 }
 
 .barLabel {
@@ -41,4 +44,17 @@
   left: 50%;
   transform: translate(-50%);
   bottom: -1.5rem;
+}
+
+/* ticks */
+.tick {
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid black;
+}
+
+.tickLabel {
+  position: absolute;
+  font-size: smaller;
+  transform: translate(-150%, -50%);
 }
