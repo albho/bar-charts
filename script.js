@@ -7,7 +7,7 @@ const options = {
   title: "Bar Chart",
   titleColor: "#222",
   titleSize: "2rem",
-
+  mainAxis: "x", // x or y
   // chart
   width: "15",
   height: "10",
@@ -32,6 +32,7 @@ function drawBarChart(data, options, element) {
   $(`<h1>${options.title}</h1>`).insertBefore(element);
   $("h1").css("color", options.titleColor);
   $("h1").css("font-size", options.titleSize);
+  $("h1").css("margin-bottom", "1rem");
 
   // render chart dimensions & background color
   let { width, height, units, backgroundColor } = options;
@@ -57,22 +58,41 @@ function drawBarChart(data, options, element) {
     let barColorIndex = i % options.barColors.length;
     let barValueIndex = i % options.valueColors.length;
     let barLabelIndex = i % options.labelColors.length;
-    let height = `${data[i]}${options.units}`;
     let barColor = `${options.barColors[barColorIndex]}`;
     let valueColor = `${options.valueColors[barValueIndex]}`;
     let labelColor = `${options.labelColors[barLabelIndex]}`;
 
-    // set bar height, color, value & label colors
-    $(`#bar${[i]}`).css("height", height);
+    // set bar color, value & label colors
     $(`#bar${[i]}`).css("background-color", barColor);
     $(`#barValue${[i]}`).css("color", valueColor);
     $(`#barLabel${[i]}`).css("color", labelColor);
   }
 
-  // set bar properties
-  const barWidth = (1 / dataLength) * (100 - options.spacing) + "%";
-  $(".bar").css("width", barWidth);
-  $(".bar").css("align-items", options.valuesPosition);
+  // set bar properties according to axis
+  const barValue = (1 / dataLength) * (100 - options.spacing) + "%";
+  if (options.mainAxis === "x") {
+    $(".bar").css("width", barValue);
+    $(".bar").css("align-items", options.valuesPosition);
+    for (let i = 0; i < dataLength; i++) {
+      let height = `${data[i]}${options.units}`;
+      $(`#bar${[i]}`).css("height", height);
+    }
+  } else if (options.mainAxis === "y") {
+    $("#barChart").css("flex-direction", "column");
+    $("#barChart").css("align-items", "flex-start");
+    $(".bar").css("height", barValue);
+    $(".bar").css("align-items", "center");
+    $(".bar").css("justify-content", options.valuesPosition);
+    $(".barLabel").css("position", "absolute");
+    $(".barLabel").css("height", "fit-content");
+    $(".barLabel").css("left", "-0.5rem");
+    $(".barLabel").css("top", "0");
+    $(".barLabel").css("transform", "translate(-100%, 50%)");
+    for (let i = 0; i < dataLength; i++) {
+      let width = `${data[i]}${options.units}`;
+      $(`#bar${[i]}`).css("width", width);
+    }
+  }
 }
 
 // call main function
