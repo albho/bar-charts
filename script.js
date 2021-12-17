@@ -1,10 +1,15 @@
 // dummy data
 const data = [1, 2, 3, 4, 5];
 const options = {
+  title: "Bar Chart",
+
+  // chart
   width: "10",
   height: "10",
   units: "cm",
   backgroundColor: "lightgrey",
+
+  // bars
   barValuesPosition: "flex-end", // flex-start, center, flex-end
   labels: ["one", "two", "three", "four", "five"],
   barsColor: "#333",
@@ -29,6 +34,7 @@ function drawBarChart(data, options, element) {
 
 // set chart properties
 function setProperties(options, element) {
+  $(`<h1>${options.title}</h1>`).insertBefore(element);
   // render chart dimensions & background color
   let { width, height, units, backgroundColor } = options;
   width += units;
