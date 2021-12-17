@@ -1,5 +1,5 @@
 // dummy data
-const data = [1, 2, 3, 4, 5];
+const data = [3, 4, 5, 1, 2];
 const options = {
   title: "Bar Chart",
 
@@ -10,17 +10,17 @@ const options = {
   backgroundColor: "lightgrey",
 
   // bars
-  barValuesPosition: "flex-end", // flex-start, center, flex-end
-  labels: ["one", "two", "three", "four", "five"],
+  barValuesPosition: "center", // flex-start, center, flex-end
+  labels: ["three", "four", "five", "one", "two"],
   barsColor: "#333",
 };
-const element = "#barChart";
+const element = $("#barChart");
 
 // main function
 function drawBarChart(data, options, element) {
   // render individual bars
   for (let i = 0; i < data.length; i++) {
-    $(element).append(
+    element.append(
       `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${
         options.units
       }'><p class='barValue'>${data[i]}</p><p class='barLabel'>${
@@ -39,9 +39,9 @@ function setProperties(options, element) {
   let { width, height, units, backgroundColor } = options;
   width += units;
   height += units;
-  $(element).css("width", width);
-  $(element).css("height", height);
-  $(element).css("background-color", backgroundColor);
+  element.css("width", width);
+  element.css("height", height);
+  element.css("background-color", backgroundColor);
 
   // bar properties
   const barWidth = (1 / data.length) * 80 + "%";
