@@ -5,6 +5,7 @@ const options = {
   height: "10",
   units: "cm",
   backgroundColor: "lightgrey",
+  labels: ["one", "two", "three", "four", "five"],
   barsColor: "#333",
 };
 const element = "#barChart";
@@ -12,11 +13,11 @@ const element = "#barChart";
 // main function
 function drawBarChart(data, options, element) {
   // render individual bars
-  data.forEach((bar) => {
+  for (let i = 0; i < data.length; i++) {
     $(element).append(
-      `<div class='bar' id='bar${bar}' style='height: ${bar}${options.units}'>${bar}</div>`
+      `<div class='bar' id='bar${data[i]}' style='height: ${data[i]}${options.units}'><p>${data[i]}</p><p class='barLabel'>${options.labels[i]}</p></div>`
     );
-  });
+  }
 
   setProperties(options, element);
 }

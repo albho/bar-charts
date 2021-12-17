@@ -21,5 +21,12 @@ main {
 .bar {
   text-align: center;
   background-color: black;
-  color: white;
+  position: relative;
+}
+
+.barLabel {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 50%;
+  transform: translate(-50%);
 }
