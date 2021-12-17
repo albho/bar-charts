@@ -32,9 +32,9 @@ function setProperties(options, element) {
   $(element).css("background-color", backgroundColor);
 
   // bar properties
-  const barWidth = (1 / data.length) * 100;
+  const barWidth = (1 / data.length) * 80 + "%";
   $(".bar").css("background-color", options.barsColor);
-  $(".bar").css("width", `${barWidth}${units}`);
+  $(".bar").css("width", `${barWidth}`);
 }
 
 // call main function
