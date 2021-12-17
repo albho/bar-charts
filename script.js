@@ -15,7 +15,7 @@ function drawBarChart(data, options, element) {
   // render individual bars
   for (let i = 0; i < data.length; i++) {
     $(element).append(
-      `<div class='bar' id='bar${data[i]}' style='height: ${data[i]}${options.units}'><p>${data[i]}</p><p class='barLabel'>${options.labels[i]}</p></div>`
+      `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${options.units}'><p>${data[i]}</p><p class='barLabel'>${options.labels[i]}</p></div>`
     );
   }
 
