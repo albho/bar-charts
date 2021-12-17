@@ -7,11 +7,11 @@ const options = {
   title: "Bar Chart",
   titleColor: "#222",
   titleSize: "2rem",
-  mainAxis: "x", // x or y
+  mainAxis: "y", // x or y
 
   // chart
-  width: 15,
-  height: 10,
+  xAxis: 15,
+  yAxis: 10,
   units: "cm",
   backgroundColor: "#ccc",
   tickInterval: 2,
@@ -37,11 +37,11 @@ function drawBarChart(data, options, element) {
   $("h1").css("margin-bottom", "1rem");
 
   // render chart dimensions & background color
-  let { width, height, units, backgroundColor } = options;
-  width += units;
-  height += units;
-  element.css("width", width);
-  element.css("height", height);
+  let { xAxis, yAxis, units, backgroundColor } = options;
+  xAxis += units;
+  yAxis += units;
+  element.css("width", xAxis);
+  element.css("height", yAxis);
   element.css("background-color", backgroundColor);
 
   // render individual bars
@@ -79,16 +79,16 @@ function drawBarChart(data, options, element) {
     $(".bar").css("align-items", options.valuesPosition);
 
     // set ticks
-    for (let i = options.height; i >= 0; i -= options.tickInterval) {
+    for (let i = 0; i <= options.yAxis; i += options.tickInterval) {
       element.append(
         `<div class='tick' style="bottom: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
       );
     }
 
-    // set bar height
+    // set bar yAxis
     for (let i = 0; i < dataLength; i++) {
-      let height = `${data[i]}${options.units}`;
-      $(`#bar${[i]}`).css("height", height);
+      let yAxis = `${data[i]}${options.units}`;
+      $(`#bar${[i]}`).css("height", yAxis);
     }
 
     // y-axis
@@ -105,7 +105,7 @@ function drawBarChart(data, options, element) {
     $(".barLabel").css("transform", "translate(-100%, 50%)");
 
     // set ticks
-    for (let i = options.width; i >= 0; i -= options.tickInterval) {
+    for (let i = 0; i <= options.xAxis; i += options.tickInterval) {
       element.append(
         `<div class='tick' style="left: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
       );
@@ -116,10 +116,10 @@ function drawBarChart(data, options, element) {
     $(".tickLabel").css("bottom", "-0.5rem");
     $(".tickLabel").css("transform", "translate(-50%, 100%");
 
-    // set bar width
+    // set bar xAxis
     for (let i = 0; i < dataLength; i++) {
-      let width = `${data[i]}${options.units}`;
-      $(`#bar${[i]}`).css("width", width);
+      let xAxis = `${data[i]}${options.units}`;
+      $(`#bar${[i]}`).css("width", xAxis);
     }
   }
 }
