@@ -5,6 +5,7 @@ const options = {
   height: "10",
   units: "cm",
   backgroundColor: "lightgrey",
+  barValuesPosition: "flex-end", // flex-start, center, flex-end
   labels: ["one", "two", "three", "four", "five"],
   barsColor: "#333",
 };
@@ -15,7 +16,11 @@ function drawBarChart(data, options, element) {
   // render individual bars
   for (let i = 0; i < data.length; i++) {
     $(element).append(
-      `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${options.units}'><p>${data[i]}</p><p class='barLabel'>${options.labels[i]}</p></div>`
+      `<div class='bar' id='bar${[i]}' style='height: ${data[i]}${
+        options.units
+      }'><p class='barValue'>${data[i]}</p><p class='barLabel'>${
+        options.labels[i]
+      }</p></div>`
     );
   }
 
@@ -35,7 +40,8 @@ function setProperties(options, element) {
   // bar properties
   const barWidth = (1 / data.length) * 80 + "%";
   $(".bar").css("background-color", options.barsColor);
-  $(".bar").css("width", `${barWidth}`);
+  $(".bar").css("width", barWidth);
+  $(".bar").css("align-items", options.barValuesPosition);
 }
 
 // call main function
