@@ -82,14 +82,14 @@ function renderBars(data, bars) {
   }
 }
 
-function renderStackedBars(data, chart, bars) {
+function renderStackedBars(data, options) {
   const dataLength = data.length;
-
+  const { chart, bars } = options;
   for (let i = 0; i < dataLength; i++) {
     element.append(
       `<div class='stackedBarContainer' id='stackedBar${i}'></div>`
     );
-    for (let j = 0; j < data[i].length; j++) {
+    for (let j = data[i].length - 1; j >= 0; j--) {
       let id = `${i}_${j}`;
       // append bars
       $(`#stackedBar${i}`).append(
@@ -105,20 +105,16 @@ function renderStackedBars(data, chart, bars) {
       const valueColor = `${bars.valueColors[barValueIndex]}`;
       // const labelColor = `${bars.labelColors[barLabelIndex]}`;
       $(`#bar${id}`).css("background-color", barColor);
-      $(`#bar${id}`).css("height", `${data[i][j]}${chart.units}`);
       $(`#barValue${id}`).css("color", valueColor);
+
+      if (chart.mainAxis === "x" || chart.mainAxis === "X") {
+        $(`#bar${id}`).css("height", `${data[i][j]}${chart.units}`);
+      } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
+        $(`#bar${id}`).css("width", `${data[i][j]}${chart.units}`);
+      }
       // $(`#barLabel${[i]}`).css("color", labelColor);
     }
   }
-
-  const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
-  $(".stackedBarContainer").css("width", barValue);
-  $(".stackedBar").css("width", "100%");
-  $(".stackedBar").css("text-align", "center");
-  $(".stackedBar").css("display", "flex");
-  $(".stackedBar").css("flex-direction", "column");
-  $(".stackedBar").css("align-items", "center");
-  $(".stackedBar").css("justify-content", bars.valuesPosition);
 }
 
 function setAxis(data, chart, bars) {
@@ -132,6 +128,10 @@ function setAxis(data, chart, bars) {
     for (let i = 0; i < dataLength; i++) {
       $(`#bar${[i]}`).css("height", `${data[i]}${chart.units}`);
     }
+
+    // for stacked bars
+    $(".stackedBarContainer").css("width", barValue);
+    $(".stackedBar").css("justify-content", bars.valuesPosition);
   } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
     $("#barChart").css("flex-direction", "column");
     $("#barChart").css("align-items", "flex-start");
@@ -143,6 +143,14 @@ function setAxis(data, chart, bars) {
     $(".barLabel").css("left", "-0.5rem");
     $(".barLabel").css("top", "0");
     $(".barLabel").css("transform", "translate(-100%, 50%)");
+
+    // for stacked bars
+    $(".stackedBarContainer").css("height", barValue);
+    $(".stackedBarContainer").css("display", "flex");
+    $(".stackedBarContainer").css("flex-direction", "row-reverse");
+    $(".stackedBar").css("display", "flex");
+    $(".stackedBar").css("align-items", "center");
+    $(".stackedBar").css("justify-content", bars.valuesPosition);
     for (let i = 0; i < dataLength; i++) {
       $(`#bar${[i]}`).css("width", `${data[i]}${chart.units}`);
     }
@@ -181,7 +189,7 @@ function drawBarChart(data, options, element) {
   if (options.type === "regular") {
     renderBars(data, bars);
   } else if (options.type === "stacked") {
-    renderStackedBars(data, chart, bars);
+    renderStackedBars(data, options);
   }
   setTicks(chart, element);
   setAxis(data, chart, bars);
