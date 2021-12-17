@@ -72,12 +72,14 @@ function drawBarChart(data, options, element) {
 
   // set bar properties according to axis
   const barValue = (1 / dataLength) * (100 - options.spacing) + "%";
+
+  // x-axis
   if (options.mainAxis === "x") {
     $(".bar").css("width", barValue);
     $(".bar").css("align-items", options.valuesPosition);
 
     // set ticks
-    for (let i = options.height; i >= 0; i--) {
+    for (let i = options.height; i >= 0; i -= options.tickInterval) {
       element.append(
         `<div class='tick' style="bottom: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
       );
@@ -88,6 +90,8 @@ function drawBarChart(data, options, element) {
       let height = `${data[i]}${options.units}`;
       $(`#bar${[i]}`).css("height", height);
     }
+
+    // y-axis
   } else if (options.mainAxis === "y") {
     $("#barChart").css("flex-direction", "column");
     $("#barChart").css("align-items", "flex-start");
@@ -101,7 +105,7 @@ function drawBarChart(data, options, element) {
     $(".barLabel").css("transform", "translate(-100%, 50%)");
 
     // set ticks
-    for (let i = options.width; i >= 0; i--) {
+    for (let i = options.width; i >= 0; i -= options.tickInterval) {
       element.append(
         `<div class='tick' style="left: ${i}${units}"><p class='tickLabel'>${i}</p></div>`
       );
