@@ -4,24 +4,24 @@
 // dummy data
 // const data = [3, 4, 5, 1, 2, 6, 7, 8];
 const data = [
-  [1, 6, 3],
-  [3, 4, 3],
-  [5, 3, 2],
+  [1.5, 4, 3],
+  [2, 2.5, 2],
+  [6, 1, 2.5],
 ];
 const options = {
   type: "stacked", // regular or stacked
   title: {
     text: "Bar Chart",
-    color: "#222",
+    color: "#111",
     fontSize: "2rem",
   },
   chart: {
-    mainAxis: "y", // x or y
-    xAxis: 18,
-    yAxis: 12,
+    mainAxis: "x", // x or y
+    xAxis: 20,
+    yAxis: 10,
     units: "cm",
-    backgroundColor: "#ccc",
-    tickInterval: 1,
+    backgroundColor: "#eee",
+    tickInterval: 2,
   },
   bars: {
     valuesPosition: "center", // flex-start, center, flex-end
@@ -32,7 +32,7 @@ const options = {
     // labelColors: ["#f00", "#0f0", "#00f"],
     labels: ["red", "green", "blue"],
     colors: ["red", "green", "blue"],
-    valueColors: ["black", "grey", "white"],
+    valueColors: ["black"],
     labelColors: ["red", "green", "blue"],
   },
 };
@@ -49,8 +49,6 @@ function renderChart(chart, element) {
   let { xAxis, yAxis, units, backgroundColor } = chart;
   xAxis += units;
   yAxis += units;
-
-  // set chart width, height, background color
   element.css("width", xAxis);
   element.css("height", yAxis);
   element.css("background-color", backgroundColor);
@@ -59,8 +57,8 @@ function renderChart(chart, element) {
 function renderBars(data, bars, element) {
   const dataLength = data.length;
 
+  // append bars
   for (let i = 0; i < dataLength; i++) {
-    // append bars
     element.append(
       `<div class='bar' id='bar${[i]}'><p class='barValue' id='barValue${[
         i,
@@ -82,41 +80,12 @@ function renderBars(data, bars, element) {
   }
 }
 
-function renderStackedBars(data, options) {
-  const dataLength = data.length;
-  const { chart, bars } = options;
-  for (let i = 0; i < dataLength; i++) {
-    element.append(
-      `<div class='stackedBarContainer' id='stackedBar${i}'></div>`
-    );
-    for (let j = data[i].length - 1; j >= 0; j--) {
-      let id = `${i}_${j}`;
-      // append bars
-      $(`#stackedBar${i}`).append(
-        `<div class='stackedBar' id='bar${id}'><p class='barValue' id='barValue${id}'>${data[i][j]}</p></div>`
-      );
-      // set properties according to axis
+function setLegend(options, element) {
+  const numLabels = options.bars.labels.length;
 
-      // set bar & bar properties' colors
-      const barColorIndex = j % bars.colors.length;
-      const barValueIndex = j % bars.valueColors.length;
-      // const barLabelIndex = i % bars.labelColors.length;
-      const barColor = `${bars.colors[barColorIndex]}`;
-      const valueColor = `${bars.valueColors[barValueIndex]}`;
-      // const labelColor = `${bars.labelColors[barLabelIndex]}`;
-      $(`#bar${id}`).css("background-color", barColor);
-      $(`#barValue${id}`).css("color", valueColor);
-
-      if (chart.mainAxis === "x" || chart.mainAxis === "X") {
-        $(`#bar${id}`).css("height", `${data[i][j]}${chart.units}`);
-      } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
-        $(`#bar${id}`).css("width", `${data[i][j]}${chart.units}`);
-      }
-      // $(`#barLabel${[i]}`).css("color", labelColor);
-    }
-  }
+  // add a 'Legend' container - color box to match bar color + label text
   $(element).append("<div class='stackedLabels'><h3>Legend</h3></div>");
-  for (let i = options.bars.labels.length - 1; i >= 0; i--) {
+  for (let i = numLabels - 1; i >= 0; i--) {
     $(".stackedLabels").append(
       `<div id='stackedLabel${i}'><div class='colorBox' id='colorBox${i}'></div>${options.bars.labels[i]}</div>`
     );
@@ -125,12 +94,53 @@ function renderStackedBars(data, options) {
   }
 }
 
+function renderStackedBars(data, options, element) {
+  const dataLength = data.length;
+  const { chart, bars } = options;
+
+  // create container for each stacked bar
+  for (let i = 0; i < dataLength; i++) {
+    element.append(
+      `<div class='stackedBarContainer' id='stackedBar${i}'></div>`
+    );
+
+    // add portions to stacked bar
+    for (let j = data[i].length - 1; j >= 0; j--) {
+      let id = `${i}_${j}`;
+
+      // append bars
+      $(`#stackedBar${i}`).append(
+        `<div class='stackedBar' id='bar${id}'><p class='barValue' id='barValue${id}'>${data[i][j]}</p></div>`
+      );
+
+      // set bar & bar properties' colors
+      const barColorIndex = j % bars.colors.length;
+      const barValueIndex = j % bars.valueColors.length;
+      const barColor = `${bars.colors[barColorIndex]}`;
+      const valueColor = `${bars.valueColors[barValueIndex]}`;
+      $(`#bar${id}`).css("background-color", barColor);
+      $(`#barValue${id}`).css("color", valueColor);
+
+      // set bar orientation
+      if (chart.mainAxis === "x" || chart.mainAxis === "X") {
+        $(`#bar${id}`).css("height", `${data[i][j]}${chart.units}`);
+      } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
+        $(`#bar${id}`).css("width", `${data[i][j]}${chart.units}`);
+      }
+    }
+  }
+
+  // set labels legend
+  setLegend(options, element);
+}
+
 function setAxis(data, chart, bars) {
   const dataLength = data.length;
   const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
 
   // set properties according to axis
   if (chart.mainAxis === "x" || chart.mainAxis === "X") {
+    // for regular bar chart
     $(".bar").css("width", barValue);
     $(".bar").css("align-items", bars.valuesPosition);
     for (let i = 0; i < dataLength; i++) {
@@ -141,6 +151,7 @@ function setAxis(data, chart, bars) {
     $(".stackedBarContainer").css("width", barValue);
     $(".stackedBar").css("justify-content", bars.valuesPosition);
   } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
+    // for regular bar chart
     $("#barChart").css("flex-direction", "column");
     $("#barChart").css("align-items", "flex-start");
     $(".bar").css("height", barValue);
