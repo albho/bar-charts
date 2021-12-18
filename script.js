@@ -30,10 +30,10 @@ const options = {
     // colors: ["#222", "#444", "#666"],
     // valueColors: ["#f00", "#0f0", "#00f"],
     // labelColors: ["#f00", "#0f0", "#00f"],
-    labels: ["top", "middle", "bottom"],
-    colors: ["#f00", "#0f0", "#00f"],
-    valueColors: ["#111", "#222", "#333"],
-    labelColors: ["#000", "#000", "#000"],
+    labels: ["red", "green", "blue"], // label text
+    colors: ["red", "green", "blue"], // bar colors
+    valueColors: ["black", "grey", "white"],
+    labelColors: ["red", "green", "blue"],
   },
 };
 const element = $("#barChart");
@@ -56,7 +56,7 @@ function renderChart(chart, element) {
   element.css("background-color", backgroundColor);
 }
 
-function renderBars(data, bars) {
+function renderBars(data, bars, element) {
   const dataLength = data.length;
 
   for (let i = 0; i < dataLength; i++) {
@@ -114,6 +114,14 @@ function renderStackedBars(data, options) {
       }
       // $(`#barLabel${[i]}`).css("color", labelColor);
     }
+  }
+  $(element).append("<div class='stackedLabels'><h3>Legend</h3></div>");
+  for (let i = options.bars.labels.length - 1; i >= 0; i--) {
+    $(".stackedLabels").append(
+      `<div id='stackedLabel${i}'><div class='colorBox' id='colorBox${i}'></div>${options.bars.labels[i]}</div>`
+    );
+    $(`#colorBox${i}`).css("background-color", options.bars.colors[i]);
+    $(`#stackedLabel${i}`).css("color", options.bars.labelColors[i]);
   }
 }
 
@@ -187,9 +195,9 @@ function drawBarChart(data, options, element) {
   renderTitle(title);
   renderChart(chart, element);
   if (options.type === "regular") {
-    renderBars(data, bars);
+    renderBars(data, bars, element);
   } else if (options.type === "stacked") {
-    renderStackedBars(data, options);
+    renderStackedBars(data, options, element);
   }
   setTicks(chart, element);
   setAxis(data, chart, bars);
