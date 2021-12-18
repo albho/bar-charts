@@ -16,7 +16,7 @@ const options = {
     fontSize: "2rem",
   },
   chart: {
-    mainAxis: "x", // x or y
+    mainAxis: "y", // x or y
     xAxis: 18,
     yAxis: 12,
     units: "cm",
@@ -30,8 +30,8 @@ const options = {
     // colors: ["#222", "#444", "#666"],
     // valueColors: ["#f00", "#0f0", "#00f"],
     // labelColors: ["#f00", "#0f0", "#00f"],
-    labels: ["red", "green", "blue"], // label text
-    colors: ["red", "green", "blue"], // bar colors
+    labels: ["red", "green", "blue"],
+    colors: ["red", "green", "blue"],
     valueColors: ["black", "grey", "white"],
     labelColors: ["red", "green", "blue"],
   },
