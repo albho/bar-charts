@@ -134,68 +134,73 @@ function renderStackedBars(data, options, element) {
   setLegend(options, element);
 }
 
-function setAxis(data, chart, bars) {
+// set main axis as X
+function setAxisX(data, chart, bars) {
   const dataLength = data.length;
   const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
 
-  // set properties according to axis
-  if (chart.mainAxis === "x" || chart.mainAxis === "X") {
-    // for regular bar chart
-    $(".bar").css("width", barValue);
-    $(".bar").css("align-items", bars.valuesPosition);
-    for (let i = 0; i < dataLength; i++) {
-      $(`#bar${[i]}`).css("height", `${data[i]}${chart.units}`);
-    }
+  // set regular bar chart's bars' properties
+  $(".bar").css("width", barValue);
+  $(".bar").css("align-items", bars.valuesPosition);
+  for (let i = 0; i < dataLength; i++) {
+    $(`#bar${[i]}`).css("height", `${data[i]}${chart.units}`);
+  }
 
-    // for stacked bars
-    $(".stackedBarContainer").css("width", barValue);
-    $(".stackedBar").css("justify-content", bars.valuesPosition);
-  } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
-    // for regular bar chart
-    $("#barChart").css("flex-direction", "column");
-    $("#barChart").css("align-items", "flex-start");
-    $(".bar").css("height", barValue);
-    $(".bar").css("align-items", "center");
-    $(".bar").css("justify-content", bars.valuesPosition);
-    $(".barLabel").css("position", "absolute");
-    $(".barLabel").css("height", "fit-content");
-    $(".barLabel").css("left", "-0.5rem");
-    $(".barLabel").css("top", "0");
-    $(".barLabel").css("transform", "translate(-100%, 50%)");
+  // set stacked bar chart's bars' properties
+  $(".stackedBarContainer").css("width", barValue);
+  $(".stackedBar").css("justify-content", bars.valuesPosition);
+}
 
-    // for stacked bars
-    $(".stackedBarContainer").css("height", barValue);
-    $(".stackedBarContainer").css("display", "flex");
-    $(".stackedBarContainer").css("flex-direction", "row-reverse");
-    $(".stackedBar").css("display", "flex");
-    $(".stackedBar").css("align-items", "center");
-    $(".stackedBar").css("justify-content", bars.valuesPosition);
-    for (let i = 0; i < dataLength; i++) {
-      $(`#bar${[i]}`).css("width", `${data[i]}${chart.units}`);
-    }
+// set main axis as Y
+function setAxisY(data, chart, bars) {
+  const dataLength = data.length;
+  const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
+
+  // set regular bar chart's bars' properties
+  $("#barChart").css("flex-direction", "column");
+  $("#barChart").css("align-items", "flex-start");
+  $(".bar").css("height", barValue);
+  $(".bar").css("align-items", "center");
+  $(".bar").css("justify-content", bars.valuesPosition);
+  $(".barLabel").css("position", "absolute");
+  $(".barLabel").css("height", "fit-content");
+  $(".barLabel").css("left", "-0.5rem");
+  $(".barLabel").css("top", "0");
+  $(".barLabel").css("transform", "translate(-100%, 50%)");
+
+  // set stacked bar chart's bars' properties
+  $(".stackedBarContainer").css("height", barValue);
+  $(".stackedBarContainer").css("display", "flex");
+  $(".stackedBarContainer").css("flex-direction", "row-reverse");
+  $(".stackedBar").css("display", "flex");
+  $(".stackedBar").css("align-items", "center");
+  $(".stackedBar").css("justify-content", bars.valuesPosition);
+  for (let i = 0; i < dataLength; i++) {
+    $(`#bar${[i]}`).css("width", `${data[i]}${chart.units}`);
   }
 }
 
-function setTicks(chart, element) {
-  // set ticks according to axis
-  if (chart.mainAxis === "x" || chart.mainAxis === "X") {
-    for (let i = 0; i <= chart.yAxis; i += chart.tickInterval) {
-      element.append(
-        `<div class='tick' style="bottom: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
-      );
-    }
-  } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
-    for (let i = 0; i <= chart.xAxis; i += chart.tickInterval) {
-      element.append(
-        `<div class='tick' style="left: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
-      );
-    }
-    $(".tick").css("width", "0");
-    $(".tick").css("height", "100%");
-    $(".tick").css("border-left", "1px solid black");
-    $(".tickLabel").css("bottom", "-0.5rem");
-    $(".tickLabel").css("transform", "translate(-50%, 100%");
+// set ticks for chart with main axis X
+function setTicksX(chart, element) {
+  for (let i = 0; i <= chart.yAxis; i += chart.tickInterval) {
+    element.append(
+      `<div class='tick' style="bottom: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
+    );
   }
+}
+
+// set ticks for chart with main axis Y
+function setTicksY(chart, element) {
+  for (let i = 0; i <= chart.xAxis; i += chart.tickInterval) {
+    element.append(
+      `<div class='tick' style="left: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
+    );
+  }
+  $(".tick").css("width", "0");
+  $(".tick").css("height", "100%");
+  $(".tick").css("border-left", "1px solid black");
+  $(".tickLabel").css("bottom", "-0.5rem");
+  $(".tickLabel").css("transform", "translate(-50%, 100%");
 }
 
 // main function
@@ -205,13 +210,20 @@ function drawBarChart(data, options, element) {
   // call helper functions
   renderTitle(title);
   renderChart(chart, element);
+
   if (options.type === "regular") {
     renderBars(data, bars, element);
   } else if (options.type === "stacked") {
     renderStackedBars(data, options, element);
   }
-  setTicks(chart, element);
-  setAxis(data, chart, bars);
+
+  if (chart.mainAxis === "x" || chart.mainAxis === "X") {
+    setTicksX(chart, element);
+    setAxisX(data, chart, bars);
+  } else if (chart.mainAxis === "y" || chart.mainAxis === "Y") {
+    setTicksY(chart, element);
+    setAxisY(data, chart, bars);
+  }
 }
 
 // call main function
