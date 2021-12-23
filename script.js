@@ -2,17 +2,16 @@
 /* eslint-disable comma-dangle */
 
 // dummy data
-// const data = [3, 4, 5, 1, 2, 6, 7, 8];
-const data = [
+let data = [
   [1.5, 4, 3],
   [2, 2.5, 2],
   [6, 1, 2.5],
 ];
-const options = {
+let options = {
   type: "stacked", // regular or stacked
   title: {
     text: "Bar Chart",
-    color: "#111",
+    color: "#559",
     fontSize: "2rem",
   },
   chart: {
@@ -26,32 +25,31 @@ const options = {
   bars: {
     valuesPosition: "center", // flex-start, center, flex-end
     spacing: "20", // 0 - 100, though 100 will render invisible bars
-    // labels: ["three", "four", "five", "one", "two", "six", "seven", "eight"],
-    // colors: ["#222", "#444", "#666"],
-    // valueColors: ["#f00", "#0f0", "#00f"],
-    // labelColors: ["#f00", "#0f0", "#00f"],
     labels: ["red", "green", "blue"],
     colors: ["red", "green", "blue"],
     valueColors: ["black"],
     labelColors: ["red", "green", "blue"],
   },
 };
-const element = $("#barChart");
+let element = $("#barChart");
 
 function renderTitle(title) {
   $(`<h1>${title.text}</h1>`).insertBefore(element);
-  $("h1").css("color", title.color);
-  $("h1").css("font-size", title.fontSize);
-  $("h1").css("margin-bottom", "1rem");
+  $("h1").css({
+    color: title.color,
+    "font-size": title.fontSize,
+  });
 }
 
 function renderChart(chart, element) {
   let { xAxis, yAxis, units, backgroundColor } = chart;
   xAxis += units;
   yAxis += units;
-  element.css("width", xAxis);
-  element.css("height", yAxis);
-  element.css("background-color", backgroundColor);
+  element.css({
+    width: xAxis,
+    height: yAxis,
+    "background-color": backgroundColor,
+  });
 }
 
 function renderBars(data, bars, element) {
@@ -140,8 +138,7 @@ function setAxisX(data, chart, bars) {
   const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
 
   // set regular bar chart's bars' properties
-  $(".bar").css("width", barValue);
-  $(".bar").css("align-items", bars.valuesPosition);
+  $(".bar").css({ width: barValue, "align-items": bars.valuesPosition });
   for (let i = 0; i < dataLength; i++) {
     $(`#bar${[i]}`).css("height", `${data[i]}${chart.units}`);
   }
@@ -157,24 +154,34 @@ function setAxisY(data, chart, bars) {
   const barValue = (1 / dataLength) * (100 - bars.spacing) + "%";
 
   // set regular bar chart's bars' properties
-  $("#barChart").css("flex-direction", "column");
-  $("#barChart").css("align-items", "flex-start");
-  $(".bar").css("height", barValue);
-  $(".bar").css("align-items", "center");
-  $(".bar").css("justify-content", bars.valuesPosition);
-  $(".barLabel").css("position", "absolute");
-  $(".barLabel").css("height", "fit-content");
-  $(".barLabel").css("left", "-0.5rem");
-  $(".barLabel").css("top", "0");
-  $(".barLabel").css("transform", "translate(-100%, 50%)");
+  $("#barChart").css({
+    "flex-direction": "column",
+    "align-items": "flex-start",
+  });
+  $(".bar").css({
+    height: barValue,
+    "align-items": "center",
+    "justify-content": bars.valuesPosition,
+  });
+  $(".barLabel").css({
+    position: "absolute",
+    height: "fit-content",
+    left: "-0.5rem",
+    top: "0",
+    transform: "translate(-100%, 50%)",
+  });
 
   // set stacked bar chart's bars' properties
-  $(".stackedBarContainer").css("height", barValue);
-  $(".stackedBarContainer").css("display", "flex");
-  $(".stackedBarContainer").css("flex-direction", "row-reverse");
-  $(".stackedBar").css("display", "flex");
-  $(".stackedBar").css("align-items", "center");
-  $(".stackedBar").css("justify-content", bars.valuesPosition);
+  $(".stackedBarContainer").css({
+    height: barValue,
+    display: "flex",
+    "flex-direction": "row-reverse",
+  });
+  $(".stackedBar").css({
+    display: "flex",
+    "align-items": "center",
+    "justify-content": bars.valuesPosition,
+  });
   for (let i = 0; i < dataLength; i++) {
     $(`#bar${[i]}`).css("width", `${data[i]}${chart.units}`);
   }
@@ -196,11 +203,12 @@ function setTicksY(chart, element) {
       `<div class='tick' style="left: ${i}${chart.units}"><p class='tickLabel'>${i}</p></div>`
     );
   }
-  $(".tick").css("width", "0");
-  $(".tick").css("height", "100%");
-  $(".tick").css("border-left", "1px solid black");
-  $(".tickLabel").css("bottom", "-0.5rem");
-  $(".tickLabel").css("transform", "translate(-50%, 100%");
+  $(".tick").css({
+    width: "0",
+    height: "100%",
+    "border-left": "1px solid black",
+  });
+  $(".tickLabel").css({ bottom: "-0.5rem", transform: "translate(-50%, 100%" });
 }
 
 // main function

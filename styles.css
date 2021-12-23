@@ -22,6 +22,10 @@
   position: relative;
 }
 
+h1 {
+  margin-bottom: 1rem;
+}
+
 /* default styling */
 .bar {
   text-align: center;
